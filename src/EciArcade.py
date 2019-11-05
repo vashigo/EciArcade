@@ -13,6 +13,7 @@ ventana_autentificacion = 0
 ventana_tic = 0
 ventana_ahorcado = 0
 vent_selec = 0
+
 # variables globales tic-tac-toe
 pa = ""
 playerb = ""
@@ -23,6 +24,20 @@ flag = 0
 buttons = []
 botonesAhorcado = []
 # variable ahorcado
+marcasAhorcado=["coca cola","nike","chrome","google","windows","apple","mcdonalds","youtube","samsung","huawei","disney","virgin",
+           "gillette","lacoste","lenovo","caterpillar","amazon","mastercard","rolex","nintendo","play station","kelloggs",
+           "spotify","instagram","facebook","snapchat","yahoo"]
+autosAhorcado=["chevrolet","renault","ferrari","volkswagen","fiat","volvo","land Rover","Lotus","ford","mercedes benz","toyota",
+            "jaguar","dodge","lamborghini","koenigseng","maserati","bugatti","hyundai","roll royce","porsche","mclaren",
+            "lexus","pagani","aston martin","peugeot","mini cooper","subaru","mitsubishi","cadillac","chrysler","bentley"]
+equiposAhorcado=["tottenham","chelsea","liverpool","burnley","southampton","swansea","manchester city","arsenal","juventus","atalanta",
+            "fiorentina","cagliari","sampdoria","bologna","udinese","olympique","marsella","toulose","barcelona","real madrid",
+            "atletico de madrid","villarreal","espanyol","getafe","real sociedad","las palmas","leverkusen","wolfsburgo","hamburgo",
+            "dortmund","bayern munich","shalke"]
+marcas = False
+autos = False
+equipos = False
+seleccionAhorcadoCategoria = 0
 imagenAhorcado = ""
 tectPerdAhorcado = ""
 palabraAdivinar = ""
@@ -33,42 +48,8 @@ TEXT1Ahor = ""
 palabrasRestantesAhorcado = 0
 letrasSeleccionadas = []
 palabraAhorcado = ""
-palabras = [
-
-    'abadejo',
-    'abejaruco',
-    'abalone',
-    'abejorro',
-    'abejaron',
-    'acedia',
-    'abeja'
-    'agamido',
-    'acaro'
-    'alacran',
-    'acentor',
-    'alce'
-    'aguila',
-    'alondra',
-    'albatros',
-    'anchoa',
-    'almeja',
-    'anfioxo',
-    'anade',
-    'anguila'
-    'anemona',
-    'araña'
-    'angelote',
-    'armadillo',
-    'antilope',
-    'arenque',
-    'armiño'
-    'asno',
-    'atun',
-    'avefria',
-    'avestruz',
-    'avetoro',
-    'avispa'
-]
+palabras = []
+palabra= ""
 
 
 # ventana de bienvenida
@@ -221,7 +202,7 @@ def mandarLetra(letra):
                     TEXT1Ahor["text"] = palabraAdivinar
                     
                     botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
-                    botonahor.place(x=250, y=20)
+                    botonahor.place(x=300, y=50)
                     ##gano!
                     if(palabrasRestantesAhorcado == 0):
                         disableBotonesAhorcado("disabled")     
@@ -267,7 +248,7 @@ def mandarLetra(letra):
                         tectPerdAhorcado["text"] = "Perdiste!"   
                         tectPerdAhorcado["bg"] = "red"                                                                         
                     botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
-                    botonahor.place(x=250, y=20)
+                    botonahor.place(x=300, y=50)
 
     ventana_ahorcado.mainloop()
 
@@ -311,8 +292,7 @@ def botonesAhor():
 
 
 def ventana_ahorcado():
-    global ventana_ahorcado, ventana_selección,tectPerdAhorcado,imagenAhorcado, botonesAhorcado, palabras, palabra,letrasSeleccionadasBien, letrasSeleccionadas, palabrasRestantesAhorcado,intentosAhorcado,palabraAdivinar, TEXT1restantes, TEXT1intentos, TEXT1Ahor
-    
+    global ventana_Ahorcado_Seleccion,ventana_ahorcado,seleccionAhorcadoCategoria, ventana_selección,tectPerdAhorcado,imagenAhorcado, botonesAhorcado, palabras, palabra,letrasSeleccionadasBien, letrasSeleccionadas, palabrasRestantesAhorcado,intentosAhorcado,palabraAdivinar, TEXT1restantes, TEXT1intentos, TEXT1Ahor, marcasAhorcado,autosAhorcado,equiposAhorcado
     def reiniciar():
         global ventana_ahorcado,tectPerdAhorcado, ventana_selección,imagenAhorcado, botonesAhorcado, palabras, palabra,letrasSeleccionadasBien, letrasSeleccionadas, palabrasRestantesAhorcado,intentosAhorcado,palabraAdivinar, TEXT1restantes, TEXT1intentos, TEXT1Ahor
         imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
@@ -323,14 +303,23 @@ def ventana_ahorcado():
         palabra = palabras[random.randint(0, len(palabras)-1)]
         imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
         botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
-        botonahor.place(x=250, y=20)
+        botonahor.place(x=300, y=50)
         TEXT1Ahor1 = tk.Label(ventana_ahorcado, text="Seleccione la letra:",
                          bg="white", fg="black", font='Helvetica 13 bold', relief="flat")
         TEXT1Ahor1.place(x=20, y=270)
         palabraAdivinar = ""
-        palabraAdivinar = " _ " * len(palabra)
+        #armar cadena de _ _ _ _ _ _
+        for j in range(len(palabra)):
+            if(palabra[j] in letrasSeleccionadasBien):
+                palabraAdivinar+= " "+palabra[j]+" "
+            else:
+                palabraAdivinar+=" _ "
         intentosAhorcado = 8
-        palabrasRestantesAhorcado = len(palabra)
+        if(" " in palabra):
+            palabrasRestantesAhorcado = len(palabra)-1
+            letrasSeleccionadasBien.append(" ")
+        else:
+            palabrasRestantesAhorcado = len(palabra)
         TEXT1restantes["text"]= "letras restantes: "+str(palabrasRestantesAhorcado)
         # intentos
         TEXT1intentos["text"] = "intentos restantes: "+str(intentosAhorcado)
@@ -341,24 +330,86 @@ def ventana_ahorcado():
         botonesAhor()
 
     def salir():
+        global ventana_ahorcado,ventana_selección
         reiniciar()
         ventana_ahorcado.withdraw()
         ventana_selección.deiconify()
     # Generar palabra
+    def jugar(opcion):
+        global ventana_ahorcado,seleccionAhorcadoCategoria, ventana_selección,tectPerdAhorcado,imagenAhorcado, botonesAhorcado, palabras, palabra,letrasSeleccionadasBien, letrasSeleccionadas, palabrasRestantesAhorcado,intentosAhorcado,palabraAdivinar, TEXT1restantes, TEXT1intentos, TEXT1Ahor, marcasAhorcado,autosAhorcado,equiposAhorcado
+        if(opcion==1):
+            seleccionAhorcadoCategoria = 1
+            palabras = marcasAhorcado
+            categoria = "Marcas internacionales"
+            botonAhorcado1["bg"] = "white"
+            botonAhorcado2["bg"] = "white"
+            botonAhorcado3["bg"] = "red"
+            
+        elif(opcion==2):
+            seleccionAhorcadoCategoria = 2
+            palabras = autosAhorcado
+            categoria = "Marcas de Autos"
+            botonAhorcado1["bg"] = "red"
+            botonAhorcado2["bg"] = "white"
+            botonAhorcado3["bg"] = "white"
+
+        elif(opcion==3):
+            seleccionAhorcadoCategoria = 3
+            palabras = equiposAhorcado
+            categoria = "Equipos de futbol"
+            botonAhorcado2["bg"] = "red"
+            botonAhorcado1["bg"] = "white"
+            botonAhorcado3["bg"] = "white"
+        palabra = palabras[random.randint(0, len(palabras)-1)]
+        #si la palabra tiene espacio
+        if(" " in palabra):
+            palabrasRestantesAhorcado = len(palabra)-1
+            letrasSeleccionadasBien.append(" ")
+        else:
+            palabrasRestantesAhorcado = len(palabra)
+        intentosAhorcado = 8
+        palabraAdivinar = ""
+        #armar cadena de _ _ _ _ _ _
+        for j in range(len(palabra)):
+            if(palabra[j] in letrasSeleccionadasBien):
+                palabraAdivinar+= " "+palabra[j]+" "
+            else:
+                palabraAdivinar+=" _ "
+        print(palabra)
+        TEXT1restantes["text"]= "letras restantes: "+str(palabrasRestantesAhorcado)
+        # intentos
+        TEXT1intentos["text"] = "intentos restantes: "+str(intentosAhorcado)
+        # letras
+        TEXT1Ahor["text"] = palabraAdivinar
+        TEXT1categoria["text"] = "Categoria: "+categoria
+        #dibujar botones
+        botonesAhor()
+    
     imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
     letrasSeleccionadas = []
     letrasSeleccionadasBien = []
-    palabra = palabras[random.randint(0, len(palabras)-1)]
-    print(palabra)
+    palabras = ""
+    categoria = ""
+    palabra = ""
     palabraAdivinar = ""
-    palabraAdivinar = " _ " * len(palabra)
+    #armar cadena de _ _ _ _ _ _
+    for j in range(len(palabra)):
+        if(palabra[j] in letrasSeleccionadasBien):
+            palabraAdivinar+= " "+palabra[j]+" "
+        else:
+            palabraAdivinar+=" _ "
     intentosAhorcado = 8
-    palabrasRestantesAhorcado = len(palabra)
-    # quito ventana seleccion
+    #si la palabra tiene espacio
+    if(" " in palabra):
+        palabrasRestantesAhorcado = len(palabra)-1
+        letrasSeleccionadasBien.append(" ")
+    else:
+        palabrasRestantesAhorcado = len(palabra)
+    # quito ventana seleccion categoria
     ventana_selección.withdraw()
     # crea ventana y se le hacen configuraciones
     ventana_ahorcado = tk.Toplevel()
-    ventana_ahorcado.title("Ahorcado")
+    ventana_ahorcado.title("Ahorcado "+categoria)
     ventana_ahorcado.configure(background="white")
     fondo = tk.PhotoImage(file="fondoAhorcado.png")
     bit = ventana_ahorcado.iconbitmap('icono.ico')  # icono
@@ -367,12 +418,24 @@ def ventana_ahorcado():
     ventana_ahorcado.resizable(
         width=False, height=False)  # no se podra grandar
     bit = ventana_ahorcado.iconbitmap('icono.ico')  # icono
-    # elementos dibujar botones
-    botonesAhor()
+    #seleccion categoria
+    TEXT1selecCategoria= tk.Label(ventana_ahorcado, text="Seleccione la Categoria: ",
+                         bg="white", fg="black", font='Helvetica 12 bold', relief="flat")
+    TEXT1selecCategoria.place(x=5, y=0)
+    botonAhorcado1= tk.Button(ventana_ahorcado,text="autos",command= lambda: jugar(2),width=8,height=0, font="Helvetica 10 bold", bg="white", fg="black",relief="solid",bd= 1)
+    botonAhorcado1.place(x=200, y=0)
+    botonAhorcado2 = tk.Button(ventana_ahorcado,text="futbol",command= lambda: jugar(3),width=8,height=0, font="Helvetica 10 bold", bg="white", fg="black",relief="solid",bd= 1)
+    botonAhorcado2.place(x=270, y=0)
+    botonAhorcado3 = tk.Button(ventana_ahorcado,text="marcas",command= lambda: jugar(1),width=8,height=0, font="Helvetica 10 bold", bg="white", fg="black",relief="solid",bd= 1)
+    botonAhorcado3.place(x=340, y=0)
+    # categoria
+    TEXT1categoria= tk.Label(ventana_ahorcado, text="Categoria: "+categoria,
+                         bg="white", fg="black", font='Helvetica 12 bold', relief="flat")
+    TEXT1categoria.place(x=20, y=30)
     # letras restantes
     TEXT1restantes= tk.Label(ventana_ahorcado, text="letras restantes: "+str(palabrasRestantesAhorcado),
                          bg="white", fg="black", font='Helvetica 12 bold', relief="flat")
-    TEXT1restantes.place(x=20, y=50)
+    TEXT1restantes.place(x=20, y=80)
     # intentos
     TEXT1intentos = tk.Label(ventana_ahorcado, text="intentos restantes: "+str(intentosAhorcado),
                          bg="white", fg="black", font='Helvetica 12 bold', relief="flat")
@@ -386,7 +449,7 @@ def ventana_ahorcado():
     TEXT1Ahor.place(x=20, y=200)
     ## muñeco
     botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
-    botonahor.place(x=250, y=20)
+    botonahor.place(x=300, y=50)
     TEXT1Ahor1 = tk.Label(ventana_ahorcado, text="Seleccione la letra:",
                          bg="white", fg="black", font='Helvetica 13 bold', relief="flat")
     TEXT1Ahor1.place(x=20, y=270)
