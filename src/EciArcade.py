@@ -384,6 +384,7 @@ def ventana_ahorcado():
         TEXT1categoria["text"] = "Categoria: "+categoria
         #dibujar botones
         botonesAhor()
+        botonAhorcadoREINICIAR.configure(state="normal")
     
     imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
     letrasSeleccionadas = []
@@ -458,6 +459,7 @@ def ventana_ahorcado():
     botonAhorcadoSALIR.place(x=100, y=460)
     botonAhorcadoREINICIAR = tk.Button(ventana_ahorcado,text="Reiniciar",command= lambda: reiniciar(),width=8,height=1, font="Helvetica 10 bold", bg="red", fg="black",relief="solid",bd= 2)
     botonAhorcadoREINICIAR.place(x=250, y=460)
+    botonAhorcadoREINICIAR.configure(state="disabled")
     #texto gano perdio
     tectPerdAhorcado = tk.Label(ventana_ahorcado, text="",
     bg="white", fg="black", font='Helvetica 16 bold', relief="flat")
@@ -558,6 +560,8 @@ def ventana_tic():
         flag = 0
         for i in range(len(buttons)):
             buttons[i]["text"] = " "
+        label["text"] = "Player X: -"
+        label2["text"] = "Player O:"
         enabledButton()
 
     def salir():
