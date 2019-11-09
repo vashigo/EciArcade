@@ -13,6 +13,9 @@ ventana_autentificacion = 0
 ventana_tic = 0
 ventana_ahorcado = 0
 vent_selec = 0
+ventana_seleccion_adivina = 0
+ventana_adivina_Maquina = 0
+ventana_adivina_Jugador = 0
 
 # variables globales tic-tac-toe
 pa = ""
@@ -50,6 +53,10 @@ letrasSeleccionadas = []
 palabraAhorcado = ""
 palabras = []
 palabra= ""
+#variable adivina
+varVentana = 0
+intentosAhorcadoMaquina = 0
+numeroMaquina = 0
 
 
 # ventana de bienvenida
@@ -128,7 +135,7 @@ def ventana_autentificacion():
 
 
 def ventana_selección():
-    global ventana_Principal, ventana_selección, ventana_autentificacion, vent_selec
+    global ventana_Principal, ventana_selección, ventana_autentificacion, vent_selec, ventana_adivina_Maquina
 
     def sair():
         global ventana_Principal, ventana_selección
@@ -157,7 +164,7 @@ def ventana_selección():
     boton3 = tk.Button(ventana_selección, text="Tic Tac Toe", command=ventana_tic, font='Helvetica 16 bold',
                        bg="#21BDE8", fg="white", activebackground="white", relief="solid")  # boton iniciar
     boton3.pack(side="top", expand="yes")
-    boton4 = tk.Button(ventana_selección, text="Adivina", command=ventana_selección, font='Helvetica 16 bold',
+    boton4 = tk.Button(ventana_selección, text="Adivina", command=ventana_seleccion_adivina, font='Helvetica 16 bold',
                        bg="#21BDE8", fg="white", activebackground="white", relief="solid")  # boton iniciar
     boton4.pack(side="top", expand="yes")
     buton5 = tk.Button(ventana_selección, text="salir", font='Times 10 bold',
@@ -300,7 +307,10 @@ def ventana_ahorcado():
         letrasSeleccionadasBien = []
         tectPerdAhorcado["text"] = ""
         tectPerdAhorcado["bg"] = "white"
-        palabra = palabras[random.randint(0, len(palabras)-1)]
+        if (len(palabras)!=0):
+            palabra = palabras[random.randint(0, len(palabras)-1)]
+        else:
+            palabra = ""
         imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
         botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
         botonahor.place(x=300, y=50)
@@ -653,6 +663,258 @@ def ventana_tic():
 
 # funcion que optimza y centra la ventana del programa a la ventana del computador
 
+def ventana_seleccion_adivina():
+    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina
+
+    def sair():
+        global ventana_seleccion_adivina, ventana_selección
+        ventana_seleccion_adivina.withdraw()
+        ventana_selección.deiconify()
+    
+    def abrirVentanaMaquina(value):
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, varVentana
+        if (varVentana==0):
+            varVentana = value
+            ventana_adivina_Maquina()
+            
+        else:
+            ventana_adivina_Maquina.deiconify()
+
+    ventana_selección.withdraw()
+    # crea ventana y se le hacen configuraciones
+    ventana_seleccion_adivina = tk.Toplevel()
+    ventana_seleccion_adivina.title("Seleccione su version de adivina")
+    ventana_seleccion_adivina.configure(background="white")
+    ventana_seleccion_adivina.geometry("704x396")
+    ventana_seleccion_adivina.resizable(
+        width=False, height=False)  # no se podra grandar
+    fondo = tk.PhotoImage(file="seleccion.png")  # carga imagen
+    lblFondo = tk.Label(ventana_seleccion_adivina, image=fondo)  # fondo
+    bit = ventana_seleccion_adivina.iconbitmap('icono.ico')  # icono
+    lblFondo.place(x=0, y=0, relwidth=1, relheight=1)  # centrar fondo
+    # texto de bienvenida
+    TEXT1 = tk.Label(ventana_seleccion_adivina, text="Escoga su version de adivina:",
+                     bg="#086E85", fg="white", font='Helvetica 30 bold', relief="flat")
+    TEXT1.pack(padx=5, pady=5, ipadx=5, ipady=5, fill=tk.X)
+    boton2SelecAdivina = tk.Button(ventana_seleccion_adivina, text="Adivina Jugador", command=ventana_adivina_Jugador, font='Helvetica 16 bold',
+                       bg="#21BDE8", fg="white", activebackground="white", relief="solid")  # boton iniciar
+    boton2SelecAdivina.pack(side="top", expand="yes")
+    boton3SelecAdivina = tk.Button(ventana_seleccion_adivina, text="Adivina Maquina", command=lambda: abrirVentanaMaquina(1), font='Helvetica 16 bold',
+                       bg="#21BDE8", fg="white", activebackground="white", relief="solid")  # boton iniciar
+    boton3SelecAdivina.pack(side="top", expand="yes")
+    buton5 = tk.Button(ventana_seleccion_adivina, text="salir", font='Times 10 bold',
+                       bg='red', fg='white', height=1, width=8, command=lambda: sair())
+    buton5.pack(expand="yes")
+    center(ventana_seleccion_adivina)  # centrar ventana
+
+    ventana_seleccion_adivina.mainloop()
+
+def ventana_adivina_Jugador():
+    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador
+    ventana_seleccion_adivina.withdraw()
+    ventana_adivina_Jugador = tk.Toplevel()
+    ventana_adivina_Jugador.title("Seleccione su version de adivina")
+    ventana_adivina_Jugador.configure(background="white")
+    ventana_adivina_Jugador.geometry("704x396")
+    ventana_adivina_Jugador.resizable(
+        width=False, height=False)  # no se podra grandar
+    fondo = tk.PhotoImage(file="seleccion.png")  # carga imagen
+    lblFondo = tk.Label(ventana_adivina_Jugador, image=fondo)  # fondo
+    bit = ventana_adivina_Jugador.iconbitmap('icono.ico')  # icono
+    lblFondo.place(x=0, y=0, relwidth=1, relheight=1)  # centrar fondo
+
+    center(ventana_adivina_Jugador)  # centrar ventana
+
+    ventana_adivina_Jugador.mainloop()
+
+def ventana_adivina_Maquina():
+    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, intentosAhorcadoMaquina, numeroMaquina
+    
+    def verificar():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, intentosAhorcadoMaquina, numeroMaquina
+        #funcion operar numero adivinado
+        def adivina():
+            global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, intentosAhorcadoMaquina, numeroMaquina
+            if (numeroAdivinaMaquina.get().isdigit()):
+                if(int(numeroAdivinaMaquina.get())==numeroMaquina):
+                    tk.messagebox.showinfo("Felicidades!", "Has adivinado mi numero correctamente!")
+                    TEXT3adivinaMaquina["text"] = "Has adivinado correctamente!"
+                    TEXT3adivinaMaquina["bg"] = "green"
+                    TEXT2adivinaMaquina.pack_forget()
+                    TEXT2pista.pack_forget()
+                    caja3adivinaMaquina.configure(state="disabled")
+                    butonadivinaNumero.configure(state="disabled")
+                else:
+                    intentosAhorcadoMaquina -= 1
+                    if(intentosAhorcadoMaquina==0):
+                        tk.messagebox.showinfo("Lo siento!", "No has adivinado mi numero correctamente!")
+                        TEXT3adivinaMaquina["text"] = "No has adivinado mi numero correctamente!"
+                        TEXT3adivinaMaquina["bg"] = "red"
+                        TEXT2adivinaMaquina.pack_forget()
+                        TEXT2pista.pack_forget()
+                        caja3adivinaMaquina.configure(state="disabled")
+                        butonadivinaNumero.configure(state="disabled")
+                    else:
+                        TEXT3adivinaMaquina["text"] =  "Ahora intenta adivinar el numero que pienso \n te quedan "+str(intentosAhorcadoMaquina)+" intentos"
+                        tk.messagebox.showinfo("lo siento", "ese no es el numero que estoy pensando")
+                        if(int(numeroAdivinaMaquina.get())<numeroMaquina):
+                            TEXT2pista["text"] = "PISTA: el numero "+numeroAdivinaMaquina.get() +" que ingresaste es menor al que pienso"
+                            TEXT2pista.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                        else:
+                            TEXT2pista["text"] = "PISTA: el numero "+numeroAdivinaMaquina.get() +" que ingresaste es mayor al que pienso"
+                            TEXT2pista.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                        caja3adivinaMaquina.delete(0,tk.END)
+
+            else:
+                tk.messagebox.showinfo("error", "por favor ingrese un valor numerico")
+        
+        if (intervaloMayor.get().isdigit() and intervaloMenor.get().isdigit()):
+            if((int(intervaloMayor.get())-int(intervaloMenor.get()))>=10):
+                ##desaparecer botones y campos de intervalos
+                buton5adivinaMaquina.place_forget()
+                caja1adivinaMaquina.place_forget()
+                caja2adivinaMaquina.place_forget()
+                text1Maquina.place_forget()
+                text2Maquina.place_forget()
+                TEXT1adivinaMaquina["text"]="Adivina el numero a la Maquina"
+                intentosAhorcadoMaquina = 10
+                numeroMaquina = random.randint(int(intervaloMenor.get()), int(intervaloMayor.get())) #numero maquina random
+                print(numeroMaquina)
+                ##dibujar el texto de maquina
+                TEXT3adivinaMaquina["text"] = "Ahora intenta adivinar el numero que pienso \n tienes "+str(intentosAhorcadoMaquina)+" intentos"
+                TEXT3adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                TEXT2adivinaMaquina["text"] = "EL numero que estoy pensando está en el \n Intervalo: "+intervaloMenor.get()+" a "+intervaloMayor.get()
+                TEXT2adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+
+                ##numero a adivinar
+                numMaquinaJugador["text"] = "adivina mi numero:"
+                numMaquinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                caja3adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                #pista
+                TEXT2pista["text"] = ""
+                TEXT2pista.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                TEXT2pista.pack_forget()
+                ##boton adivina
+                butonadivinaNumero["command"] = adivina
+                butonadivinaNumero.pack(padx=5, pady=5, ipadx=5, ipady=5)
+
+            else:
+                tk.messagebox.showinfo("error", "por favor ingrese un intervalo mayor de 0 - 10")
+        else:
+            tk.messagebox.showinfo("error", "por favor ingrese solo numeros")
+    def reiniciar():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, intentosAhorcadoMaquina, numeroMaquina
+        intentosAhorcadoMaquina = 10
+        caja1adivinaMaquina.delete(0,tk.END)
+        caja2adivinaMaquina.delete(0,tk.END)
+        #aparezco el comienzo
+        butonadivinaNumero.configure(state="normal")
+        caja3adivinaMaquina.configure(state="normal")
+        caja3adivinaMaquina.delete(0,tk.END)
+        TEXT3adivinaMaquina["bg"] = "black"
+        buton5adivinaMaquina.place(x=450, y=100)
+        caja1adivinaMaquina.place(x=300, y=100)
+        caja2adivinaMaquina.place(x=300, y=125)
+        text1Maquina.place(x=200, y=100)
+        text2Maquina.place(x=200, y=125)
+        TEXT1adivinaMaquina["text"]= "Ingrese el intervalo menor y mayor para continuar"
+        #escondo lo de adivinar
+        TEXT3adivinaMaquina.pack_forget()
+        TEXT2adivinaMaquina.pack_forget()
+        numMaquinaJugador.pack_forget()
+        caja3adivinaMaquina.pack_forget()
+        TEXT2pista.pack_forget()
+        butonadivinaNumero.pack_forget()
+
+
+    def salir():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina
+        reiniciar()
+        ventana_adivina_Maquina.withdraw()
+        ventana_seleccion_adivina.deiconify()
+
+    ventana_seleccion_adivina.withdraw()
+
+    ventana_adivina_Maquina = tk.Toplevel()
+    ventana_adivina_Maquina.title("Adivina numero a Maquina")
+    ventana_adivina_Maquina.configure(background="white")
+    ventana_adivina_Maquina.geometry("704x396")
+    ventana_adivina_Maquina.resizable(
+        width=False, height=False)  # no se podra grandar
+    fondo = tk.PhotoImage(file="seleccion.png")  # carga imagen
+    lblFondo = tk.Label(ventana_adivina_Maquina, image=fondo)  # fondo
+    bit = ventana_adivina_Maquina.iconbitmap('icono.ico')  # icono
+    lblFondo.place(x=0, y=0, relwidth=1, relheight=1)  # centrar fondo
+
+    ##campos de intervalos
+    TEXT1adivinaMaquina = tk.Label(ventana_adivina_Maquina, text="Ingrese el intervalo menor y mayor para continuar",
+                     bg="black", fg="white", font='Helvetica 20 bold')
+    TEXT1adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5, fill=tk.X)
+
+    ##intervalo menor
+    intervaloMenor = tk.StringVar(ventana_adivina_Maquina)
+    text1Maquina=tk.Label(ventana_adivina_Maquina, text="Intervalo menor:")
+    text1Maquina.place(
+        x=200, y=100)
+    caja1adivinaMaquina = tk.Entry(ventana_adivina_Maquina,
+                     textvariable=intervaloMenor, justify=tk.CENTER)
+    caja1adivinaMaquina.place(x=300, y=100)
+    ##intervalo mayor
+    intervaloMayor= tk.StringVar(ventana_adivina_Maquina)
+    text2Maquina=tk.Label(ventana_adivina_Maquina, text="Intervalo mayor:")
+    text2Maquina.place(
+        x=200, y=125)
+    caja2adivinaMaquina = tk.Entry(ventana_adivina_Maquina,
+                     textvariable=intervaloMayor, justify=tk.CENTER)
+    caja2adivinaMaquina.place(x=300, y=125)
+    ##Boton intervalo
+    buton5adivinaMaquina = tk.Button(ventana_adivina_Maquina, text="Ingresar\n intervalo", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=8, command=verificar)
+    buton5adivinaMaquina.place(x=450, y=100)
+    ##botones reiniciar y salir
+    botonAdivinaMaquinaSALIR = tk.Button(ventana_adivina_Maquina,text="salir",command= salir,width=8,height=1, font="Helvetica 10 bold", bg="blue", fg="black",relief="solid",bd= 2)
+    botonAdivinaMaquinaSALIR.place(x=10, y=180)
+    botonAdivinaMaquinaREINICIAR = tk.Button(ventana_adivina_Maquina,text="Reiniciar",command= reiniciar,width=8,height=1, font="Helvetica 10 bold", bg="red", fg="black",relief="solid",bd= 2)
+    botonAdivinaMaquinaREINICIAR.place(x=10, y=210)
+    ##otros botones
+
+    ##dibujar el texto de maquina
+    TEXT3adivinaMaquina = tk.Label(ventana_adivina_Maquina, 
+    text="Ahora intenta adivinar el numero que pienso \n tienes "+str(intentosAhorcadoMaquina)+" intentos",
+                                    bg="black", fg="white", font='Helvetica 12 bold')
+    TEXT3adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    TEXT2adivinaMaquina = tk.Label(ventana_adivina_Maquina, 
+    text="EL numero que estoy pensando está en el \n Intervalo: "+intervaloMenor.get()+" a "+intervaloMayor.get(),
+                                    bg="black", fg="white", font='Helvetica 12 bold')
+    TEXT2adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+
+    ##numero a adivinar
+    numeroAdivinaMaquina= tk.StringVar(ventana_adivina_Maquina)
+    numMaquinaJugador=tk.Label(ventana_adivina_Maquina, text="adivina mi numero:")
+    numMaquinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    caja3adivinaMaquina = tk.Entry(ventana_adivina_Maquina,
+                                textvariable=numeroAdivinaMaquina, justify=tk.CENTER)
+    caja3adivinaMaquina.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    #pista
+    TEXT2pista= tk.Label(ventana_adivina_Maquina, 
+    text="",
+                                    bg="white", fg="black", font='Helvetica 12 bold')
+    TEXT2pista.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    TEXT2pista.pack_forget()
+    ##boton adivina
+    butonadivinaNumero = tk.Button(ventana_adivina_Maquina, text="Ingresar", font='Times 15 bold',
+                       bg='red', fg='white', height=1, width=8, command=None)
+    butonadivinaNumero.pack(padx=5, pady=5, ipadx=5, ipady=5)
+
+    TEXT3adivinaMaquina.pack_forget()
+    TEXT2adivinaMaquina.pack_forget()
+    numMaquinaJugador.pack_forget()
+    caja3adivinaMaquina.pack_forget()
+    TEXT2pista.pack_forget()
+    butonadivinaNumero.pack_forget()
+
+    center(ventana_adivina_Maquina)  # centrar ventana
+    ventana_adivina_Maquina.mainloop()
 
 def center(toplevel):
     toplevel.update_idletasks()
