@@ -55,8 +55,13 @@ palabras = []
 palabra= ""
 #variable adivina
 varVentana = 0
+varVentana2 = 0
 intentosAhorcadoMaquina = 0
 numeroMaquina = 0
+intentosAhorcadoJugador = 0
+numeroJugador = 0
+menorJugador = 0
+mayorJugador = 0
 
 
 # ventana de bienvenida
@@ -664,7 +669,7 @@ def ventana_tic():
 # funcion que optimza y centra la ventana del programa a la ventana del computador
 
 def ventana_seleccion_adivina():
-    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina
+    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, ventana_adivina_Jugador
 
     def sair():
         global ventana_seleccion_adivina, ventana_selección
@@ -678,7 +683,18 @@ def ventana_seleccion_adivina():
             ventana_adivina_Maquina()
             
         else:
+            ventana_seleccion_adivina.withdraw()
             ventana_adivina_Maquina.deiconify()
+
+    def abrirVentanaJugador(valor):
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Maquina, varVentana2
+        if (varVentana2==0):
+            varVentana2 = valor
+            ventana_adivina_Jugador()
+            
+        else:
+            ventana_seleccion_adivina.withdraw()
+            ventana_adivina_Jugador.deiconify()
 
     ventana_selección.withdraw()
     # crea ventana y se le hacen configuraciones
@@ -696,7 +712,7 @@ def ventana_seleccion_adivina():
     TEXT1 = tk.Label(ventana_seleccion_adivina, text="Escoga su version de adivina:",
                      bg="#086E85", fg="white", font='Helvetica 30 bold', relief="flat")
     TEXT1.pack(padx=5, pady=5, ipadx=5, ipady=5, fill=tk.X)
-    boton2SelecAdivina = tk.Button(ventana_seleccion_adivina, text="Adivina Jugador", command=ventana_adivina_Jugador, font='Helvetica 16 bold',
+    boton2SelecAdivina = tk.Button(ventana_seleccion_adivina, text="Adivina Jugador", command=lambda: abrirVentanaJugador(1), font='Helvetica 16 bold',
                        bg="#21BDE8", fg="white", activebackground="white", relief="solid")  # boton iniciar
     boton2SelecAdivina.pack(side="top", expand="yes")
     boton3SelecAdivina = tk.Button(ventana_seleccion_adivina, text="Adivina Maquina", command=lambda: abrirVentanaMaquina(1), font='Helvetica 16 bold',
@@ -710,10 +726,140 @@ def ventana_seleccion_adivina():
     ventana_seleccion_adivina.mainloop()
 
 def ventana_adivina_Jugador():
-    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador
+    global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador
+    
+    def verificar():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador, menorJugador, mayorJugador
+        
+        def si_no_adivine(valor):
+            global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador, menorJugador, mayorJugador
+            
+            def menor_mayor(rango):
+                global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador, menorJugador, mayorJugador
+
+                if(rango == "mayor"):
+                    mayorJugador = numeroJugador
+                    numeroJugador = random.randint(int(menorJugador), int(mayorJugador)) #numero Jugador random
+                else:
+                    menorJugador = numeroJugador
+                    numeroJugador = random.randint(int(menorJugador), int(mayorJugador)) #numero Jugador random
+                tk.messagebox.showinfo("Gracias", "acomodare un nuevo rango")
+                #actualizo intentos, numero posible de jugador y habilito botones si y no en pantalla
+                TEXT2adivinaJugador["text"] = "Qué está en el \n Intervalo: "+str(menorJugador)+" a "+str(mayorJugador)
+                TEXT3adivinaJugador["text"] = "Tengo "+str(intentosAhorcadoJugador)+" intentos"
+                numJugadorJugador["text"] = "Tu numero es:\n " + str(numeroJugador)
+                butonJugadorSi.configure(state = "normal")
+                butonJugadorNo.configure(state = "normal")
+                #desaparezco el texto y botones de menor y mayor
+                TEXT2adivinaJugadorRango.place_forget()
+                butonJugadorMAYOR.place_forget()
+                butonJugadorMENOR.place_forget()
+
+
+            if(valor == "si"):
+                tk.messagebox.showinfo("Ganee!", "logre adivinar tú numero :D")
+                TEXT1adivinaJugador["bg"]="green"
+                TEXT1adivinaJugador["text"]="Adivine tú numero :D"
+                butonJugadorSi.configure(state = "disabled")
+                butonJugadorNo.configure(state = "disabled")
+            else:
+                intentosAhorcadoJugador-=1
+                if(intentosAhorcadoJugador == 0):
+                    TEXT3adivinaJugador["text"] = "Tengo "+str(intentosAhorcadoJugador)+" intentos"
+                    tk.messagebox.showinfo("Perdi!", "No logre adivinar tú numero :(")
+                    TEXT1adivinaJugador["bg"]="red"
+                    TEXT1adivinaJugador["text"]="No Adivine tú numero :("
+                    butonJugadorSi.configure(state = "disabled")
+                    butonJugadorNo.configure(state = "disabled")
+
+                else:
+                    tk.messagebox.showinfo("argh :(", "Bueno no lo logre pero me ayudarias diciendo si es mayor o menor a tú numero?")
+                    butonJugadorSi.configure(state = "disabled")
+                    butonJugadorNo.configure(state = "disabled")
+                    ## texto menor o mayor
+                    TEXT2adivinaJugadorRango["text"] = "El numero "+str(numeroJugador)+" es mayor o menor?"
+                    TEXT2adivinaJugadorRango.place(relx = 0.5,y=290,anchor = "center")
+                    ##botones mayor  o menor
+                    butonJugadorMAYOR["text"] = "MAYOR"
+                    butonJugadorMAYOR["command"] = lambda : menor_mayor("mayor")
+                    butonJugadorMAYOR.place(x=270,y=320)
+                    butonJugadorMENOR["text"] = "MENOR"
+                    butonJugadorMENOR["command"] = lambda : menor_mayor("menor")
+                    butonJugadorMENOR.place(x=370,y=320)
+
+        if (intervaloMayorJ.get().isdigit() and intervaloMenorJ.get().isdigit()):
+            if((int(intervaloMayorJ.get())-int(intervaloMenorJ.get()))>=10):
+                ##desaparecer botones y campos de intervalos
+                buton5adivinaJugador.place_forget()
+                caja1adivinaJugador.place_forget()
+                caja2adivinaJugador.place_forget()
+                text1Jugador.place_forget()
+                text2Jugador.place_forget()
+                TEXT1adivinaJugador["text"]="Ahora intentare adivinar tú numero"
+                intentosAhorcadoJugador = 5
+                menorJugador = intervaloMenorJ.get()
+                mayorJugador = intervaloMayorJ.get()
+                numeroJugador = random.randint(int(menorJugador), int(mayorJugador)) #numero Jugador random
+                ##dibujar el texto de Jugador
+                TEXT2adivinaJugador["text"] = "Qué está en el \n Intervalo: "+intervaloMenorJ.get()+" a "+intervaloMayorJ.get()
+                TEXT2adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                TEXT3adivinaJugador["text"] = "Tengo "+str(intentosAhorcadoJugador)+" intentos"
+                TEXT3adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+
+                ##numero a adivinar
+                numJugadorJugador["text"] = "Tu numero es:\n " + str(numeroJugador)
+                numJugadorJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+                ##boton SI o NO
+                butonJugadorSi["command"] = lambda : si_no_adivine("si")
+                butonJugadorSi["bg"] = "green"
+                butonJugadorSi.place(x=305, y=230)
+                butonJugadorNo["command"] = lambda : si_no_adivine("no")
+                butonJugadorNo.place(x=355, y=230)
+            else:
+                tk.messagebox.showinfo("error", "por favor ingrese el rango de intervalo mayor a 10")
+        else:
+            tk.messagebox.showinfo("error", "por favor ingrese solo numeros")
+
+    def reiniciar():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador
+        #escondo estos elementos 
+        TEXT2adivinaJugador.pack_forget()
+        TEXT3adivinaJugador.pack_forget()
+        numJugadorJugador.pack_forget()
+        butonJugadorSi.pack_forget()
+        butonJugadorNo.pack_forget()
+        TEXT2adivinaJugadorRango.pack_forget()
+        butonJugadorMAYOR.pack_forget()
+        butonJugadorMENOR.pack_forget()
+        #redibujo los primeroe elementos
+        TEXT1adivinaJugador["text"] = "Piensa un numero e ingresa un rango de intervalo\n en el cual esté ese numero"
+        TEXT1adivinaJugador["bg"] = "black"
+        TEXT1adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5, fill=tk.X)
+        text1Jugador.place(x=200, y=100)
+        text2Jugador.place(x=200, y=125)
+        caja1adivinaJugador.place(x=300, y=100)
+        caja1adivinaJugador.delete(0,tk.END)
+        caja2adivinaJugador.place(x=300, y=125)
+        caja2adivinaJugador.delete(0,tk.END)
+        buton5adivinaJugador.place(x=450, y=100)
+        butonJugadorSi.configure(state="normal")
+        butonJugadorSi.place_forget()
+        butonJugadorNo.configure(state="normal")
+        butonJugadorNo.place_forget()
+        butonJugadorMAYOR.place_forget()
+        butonJugadorMENOR.place_forget()
+        TEXT2adivinaJugadorRango.place_forget()
+        
+
+    def salir():
+        global ventana_seleccion_adivina, ventana_selección, ventana_adivina_Jugador, intentosAhorcadoJugador, numeroJugador
+        reiniciar()
+        ventana_adivina_Jugador.withdraw()
+        ventana_seleccion_adivina.deiconify()
+
     ventana_seleccion_adivina.withdraw()
     ventana_adivina_Jugador = tk.Toplevel()
-    ventana_adivina_Jugador.title("Seleccione su version de adivina")
+    ventana_adivina_Jugador.title("Adivinare tú numero")
     ventana_adivina_Jugador.configure(background="white")
     ventana_adivina_Jugador.geometry("704x396")
     ventana_adivina_Jugador.resizable(
@@ -723,8 +869,80 @@ def ventana_adivina_Jugador():
     bit = ventana_adivina_Jugador.iconbitmap('icono.ico')  # icono
     lblFondo.place(x=0, y=0, relwidth=1, relheight=1)  # centrar fondo
 
-    center(ventana_adivina_Jugador)  # centrar ventana
+    ##texto inicial
+    TEXT1adivinaJugador = tk.Label(ventana_adivina_Jugador, text="Piensa un numero e ingresa un rango de intervalo\n en el cual esté ese numero",
+                     bg="black", fg="white", font='Helvetica 20 bold')
+    TEXT1adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5, fill=tk.X)    
+    ##intervalo menor
+    intervaloMenorJ = tk.StringVar(ventana_adivina_Jugador)
+    text1Jugador=tk.Label(ventana_adivina_Jugador, text="Intervalo menor:")
+    text1Jugador.place(
+        x=200, y=100)
+    caja1adivinaJugador = tk.Entry(ventana_adivina_Jugador,
+                     textvariable=intervaloMenorJ, justify=tk.CENTER)
+    caja1adivinaJugador.place(x=300, y=100)
+    ##intervalo mayor
+    intervaloMayorJ= tk.StringVar(ventana_adivina_Jugador)
+    text2Jugador=tk.Label(ventana_adivina_Jugador, text="Intervalo mayor:")
+    text2Jugador.place(
+        x=200, y=125)
+    caja2adivinaJugador = tk.Entry(ventana_adivina_Jugador,
+                     textvariable=intervaloMayorJ, justify=tk.CENTER)
+    caja2adivinaJugador.place(x=300, y=125)
+    ##Boton intervalo
+    buton5adivinaJugador = tk.Button(ventana_adivina_Jugador, text="Ingresar\n intervalo", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=8, command=verificar)
+    buton5adivinaJugador.place(x=450, y=100)
+    ##botones reiniciar y salir
+    botonAdivinaJugadorSALIR = tk.Button(ventana_adivina_Jugador,text="salir",command= salir,width=8,height=1, font="Helvetica 10 bold", bg="blue", fg="black",relief="solid",bd= 2)
+    botonAdivinaJugadorSALIR.place(x=10, y=180)
+    botonAdivinaJugadorREINICIAR = tk.Button(ventana_adivina_Jugador,text="Reiniciar",command= reiniciar,width=8,height=1, font="Helvetica 10 bold", bg="red", fg="black",relief="solid",bd= 2)
+    botonAdivinaJugadorREINICIAR.place(x=10, y=210)
+    ##otros botones
+    ##dibujar el texto de maquina
+    TEXT3adivinaJugador = tk.Label(ventana_adivina_Jugador, 
+    text="Ahora intenta adivinar el numero que pienso \n tienes "+str(intentosAhorcadoJugador)+" intentos",
+                                    bg="white", fg="black", font='Helvetica 12 bold')
+    TEXT3adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    TEXT2adivinaJugador = tk.Label(ventana_adivina_Jugador, 
+    text="EL numero que estoy pensando está en el \n Intervalo: "+intervaloMenorJ.get()+" a "+intervaloMayorJ.get(),
+                                    bg="white", fg="black", font='Helvetica 12 bold')
+    TEXT2adivinaJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    ##numero a adivinar
+    numeroAdivinaMaquina2= tk.StringVar(ventana_adivina_Jugador)
+    numJugadorJugador=tk.Label(ventana_adivina_Jugador, text="adivina mi numero:")
+    numJugadorJugador.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    ##boton SI o NO Numero
+    butonJugadorSi = tk.Button(ventana_adivina_Jugador, text="SI", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=5, command=lambda : si_no_adivine("si"))
+    butonJugadorSi.pack(padx=5, pady=5, ipadx=5, ipady=5, side = "left")
+    butonJugadorNo = tk.Button(ventana_adivina_Jugador, text="NO", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=5, command=lambda : si_no_adivine("no"))
+    butonJugadorNo.pack(padx=5, pady=5, ipadx=5, ipady=5, side = "left")
+    ## Texto ayuda
+    TEXT2adivinaJugadorRango = tk.Label(ventana_adivina_Jugador, 
+    text="El numero que dije es menor o mayor a tú numero?",
+                                    bg="black", fg="white", font='Helvetica 12 bold')
+    TEXT2adivinaJugadorRango.pack(padx=5, pady=5, ipadx=5, ipady=5)
+    ##boton MENOR o MAYOR
+    butonJugadorMAYOR = tk.Button(ventana_adivina_Jugador, text="SI", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=8, command=None)
+    butonJugadorMAYOR.pack(padx=5, pady=5, ipadx=5, ipady=8, side = "left")
+    butonJugadorMENOR = tk.Button(ventana_adivina_Jugador, text="NO", font='Times 10 bold',
+                       bg='red', fg='white', height=2, width=8, command=None)
+    butonJugadorMENOR.pack(padx=5, pady=5, ipadx=5, ipady=8, side = "left")
 
+    #escondo estos elementos 
+    TEXT2adivinaJugador.pack_forget()
+    TEXT3adivinaJugador.pack_forget()
+    numJugadorJugador.pack_forget()
+    butonJugadorSi.pack_forget()
+    butonJugadorNo.pack_forget()
+    TEXT2adivinaJugadorRango.pack_forget()
+    butonJugadorMAYOR.pack_forget()
+    butonJugadorMENOR.pack_forget()
+
+    center(ventana_adivina_Jugador)  # centrar ventana
     ventana_adivina_Jugador.mainloop()
 
 def ventana_adivina_Maquina():
