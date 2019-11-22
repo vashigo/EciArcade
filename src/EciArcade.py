@@ -314,10 +314,15 @@ def ventana_ahorcado():
         letrasSeleccionadasBien = []
         tectPerdAhorcado["text"] = ""
         tectPerdAhorcado["bg"] = "white"
-        if (len(palabras)!=0):
-            palabra = palabras[random.randint(0, len(palabras)-1)]
-        else:
-            palabra = ""
+        botonAhorcado1.configure(state="normal")
+        botonAhorcado2.configure(state="normal")
+        botonAhorcado3.configure(state="normal")
+        botonAhorcado1["bg"] = "white"
+        botonAhorcado2["bg"] = "white"
+        botonAhorcado3["bg"] = "white"
+        categoria=""
+        TEXT1categoria["text"] = "Categoria: "+categoria
+        palabra=""
         imagenAhorcado = tk.PhotoImage(file="muñ1.PNG")
         botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
         botonahor.place(x=300, y=50)
@@ -342,9 +347,8 @@ def ventana_ahorcado():
         TEXT1intentos["text"] = "intentos restantes: "+str(intentosAhorcado)
         # letras
         TEXT1Ahor["text"] = palabraAdivinar
-        disableBotonesAhorcado("disabled")
-        disableBotonesAhorcado("normal")
         botonesAhor()
+        disableBotonesAhorcado("disabled")
 
     def salir():
         global ventana_ahorcado,ventana_selección
@@ -354,29 +358,39 @@ def ventana_ahorcado():
     # Generar palabra
     def jugar(opcion):
         global ventana_ahorcado,seleccionAhorcadoCategoria, ventana_selección,tectPerdAhorcado,imagenAhorcado, botonesAhorcado, palabras, palabra,letrasSeleccionadasBien, letrasSeleccionadas, palabrasRestantesAhorcado,intentosAhorcado,palabraAdivinar, TEXT1restantes, TEXT1intentos, TEXT1Ahor, marcasAhorcado,autosAhorcado,equiposAhorcado
+        disableBotonesAhorcado("normal")
         if(opcion==1):
             seleccionAhorcadoCategoria = 1
             palabras = marcasAhorcado
             categoria = "Marcas internacionales"
             botonAhorcado1["bg"] = "white"
+            botonAhorcado1.configure(state="disable")
             botonAhorcado2["bg"] = "white"
+            botonAhorcado2.configure(state="disable")
             botonAhorcado3["bg"] = "red"
+            botonAhorcado3.configure(state="disable")
             
         elif(opcion==2):
             seleccionAhorcadoCategoria = 2
             palabras = autosAhorcado
             categoria = "Marcas de Autos"
             botonAhorcado1["bg"] = "red"
+            botonAhorcado1.configure(state="disable")
             botonAhorcado2["bg"] = "white"
+            botonAhorcado2.configure(state="disable")
             botonAhorcado3["bg"] = "white"
+            botonAhorcado3.configure(state="disable")
 
         elif(opcion==3):
             seleccionAhorcadoCategoria = 3
             palabras = equiposAhorcado
             categoria = "Equipos de futbol"
             botonAhorcado2["bg"] = "red"
+            botonAhorcado1.configure(state="disable")
             botonAhorcado1["bg"] = "white"
+            botonAhorcado2.configure(state="disable")
             botonAhorcado3["bg"] = "white"
+            botonAhorcado3.configure(state="disable")
         palabra = palabras[random.randint(0, len(palabras)-1)]
         #si la palabra tiene espacio
         if(" " in palabra):
@@ -463,7 +477,7 @@ def ventana_ahorcado():
                          bg="white", fg="black", font='Helvetica 15 bold', relief="flat")
     TEXT1Ahor1.place(x=20, y=170)
     TEXT1Ahor = tk.Label(ventana_ahorcado, text=palabraAdivinar,
-                         bg="white", fg="black", font='Helvetica 18 bold', relief="flat")
+                         bg="white", fg="black", font='Helvetica 14', relief="flat")
     TEXT1Ahor.place(x=20, y=200)
     ## muñeco
     botonahor = tk.Button(ventana_ahorcado,image=imagenAhorcado)
