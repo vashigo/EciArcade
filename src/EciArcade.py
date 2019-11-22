@@ -18,6 +18,8 @@ ventana_adivina_Maquina = 0
 ventana_adivina_Jugador = 0
 
 # variables globales tic-tac-toe
+wina=False
+winb=False
 pa = ""
 playerb = ""
 p1 = ""
@@ -484,11 +486,13 @@ def ventana_ahorcado():
 
 
 def ventana_tic():
-    global ventana_Principal, ventana_selección, p1, p2, pa, playerb, buttons, flag, bclick
+    global ventana_Principal, ventana_selección, p1, p2, pa, playerb, buttons, flag, bclick,wina,winb
     p1 = tk.StringVar()
     p2 = tk.StringVar()
     pa = tk.StringVar()
     playerb = tk.StringVar()
+    wina=False
+    winb=False
 
     def disableButton():
         button1.configure(state="disabled")
@@ -534,47 +538,111 @@ def ventana_tic():
         else:
             tk.messagebox.showinfo("Tic-Tac-Toe", "Button already Clicked!")
 
-    def checkForWin():
-        global flag
-        if(flag == 8):
-            tk.messagebox.showinfo("Tic-Tac-Toe", "empate!")
-            disableButton()
-        elif (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X' or
-              button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X' or
-              button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X' or
-              button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X' or
-              button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X' or
-              button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X' or
-              button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X' or
-              button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X' or
-              button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X' or
-              button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'):
-            label["text"] = "Player X:"
-            label2["text"] = "Player O:"
-            disableButton()
-            tk.messagebox.showinfo("Tic-Tac-Toe", pa)
-
-        elif (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O' or
-              button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O' or
+    def checkWin():
+        global wina, winb
+        win=False
+        if( button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X' or
+            button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X' or
+            button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X' or
+            button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X' or
+            button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X' or
+            button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X' or
+            button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X' or
+            button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X' ):
+            
+           win = True
+           wina = True
+        elif( button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O' or
               button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O' or
               button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O' or
               button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O' or
               button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O' or
               button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O' or
               button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O' or
-              button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O' or
-              button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'):
-            label["text"] = "Player X:"
-            label2["text"] = "Player O:"
+              button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O' ):
+
+            win = True
+            winb = True
+
+        return win
+
+    def colorWin(player):
+        if (button4['text'] == player and button5['text'] == player and button6['text'] == player):
+            button4["bg"] = "red"
+            button5["bg"] = "red"
+            button6["bg"] = "red"
+        elif (button7['text'] == player and button8['text'] == player and button9['text'] == player):
+            button7["bg"] = "red"
+            button8["bg"] = "red"
+            button9["bg"] = "red"
+        elif (button1['text'] == player and button5['text'] == player and button9['text'] == player):
+            button1["bg"] = "red"
+            button5["bg"] = "red"
+            button9["bg"] = "red"
+        elif (button3['text'] == player and button5['text'] == player and button7['text'] == player):
+            button3["bg"] = "red"
+            button5["bg"] = "red"
+            button7["bg"] = "red"
+        elif (button1['text'] == player and button2['text'] == player and button3['text'] == player):
+            button1["bg"] = "red"
+            button2["bg"] = "red"
+            button3["bg"] = "red"
+        elif (button1['text'] == player and button4['text'] == player and button7['text'] == player):
+            button1["bg"] = "red"
+            button4["bg"] = "red"
+            button7["bg"] = "red"
+        elif (button2['text'] == player and button5['text'] == player and button8['text'] == player):
+            button2["bg"] = "red"
+            button5["bg"] = "red"
+            button8["bg"] = "red"
+        elif (button3['text'] == player and button6['text'] == player and button9['text'] == player):
+            button3["bg"] = "red"
+            button6["bg"] = "red"
+            button9["bg"] = "red"
+
+    def checkForWin():
+        global flag, wina,winb
+        if(flag == 8 and checkWin()):
+            if(wina==True):
+                label["text"] = "Player X:"
+                label2["text"] = "Player O:"
+                colorWin("X")
+                disableButton()
+                tk.messagebox.showinfo("Tic-Tac-Toe", pa)
+            if(winb==True):
+                label["text"] = "Player X:"
+                label2["text"] = "Player O:"
+                colorWin("O")
+                disableButton()
+                tk.messagebox.showinfo("Tic-Tac-Toe", playerb)
+        elif(flag == 8 and (checkWin()==False)):
+            tk.messagebox.showinfo("Tic-Tac-Toe", "empate!")
             disableButton()
-            tk.messagebox.showinfo("Tic-Tac-Toe", playerb)
+        elif(checkWin()):
+            if(wina==True):
+                label["text"] = "Player X:"
+                label2["text"] = "Player O:"
+                colorWin("X")
+                disableButton()
+                tk.messagebox.showinfo("Tic-Tac-Toe", pa)
+            if(winb==True):
+                label["text"] = "Player X:"
+                label2["text"] = "Player O:"
+                colorWin("O")
+                disableButton()
+                tk.messagebox.showinfo("Tic-Tac-Toe", playerb)
+
+
 
     def reiniciar():
-        global buttons, flag, bclick
+        global buttons, flag, bclick,wina,winb
+        wina=False
+        winb=False
         bclick = True
         flag = 0
         for i in range(len(buttons)):
             buttons[i]["text"] = " "
+            buttons[i]["bg"] = "white"
         label["text"] = "Player X: -"
         label2["text"] = "Player O:"
         enabledButton()
